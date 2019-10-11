@@ -1,0 +1,128 @@
+<mat-card class="profile-card">
+    <mat-card-header class="profile-header">
+        <mat-card-title>Profile data</mat-card-title>
+    </mat-card-header>
+
+<form class="example-form" [formGroup]="profile" (ngSubmit)="onSubmit()">
+
+    <table class="example-full-width">
+        <tr>
+            <td>
+                <mat-form-field class="name">
+                    <input matInput placeholder="First name" formControlName="name" [errorStateMatcher]="matcher">
+                    <mat-hint>required</mat-hint>
+                    <mat-error *ngIf="hasError('name','required')">
+                        First name is <strong>required</strong>
+                    </mat-error>
+                    <mat-error *ngIf="hasError('name','forbiddenName')">
+                        First name is <strong>forbidden</strong>
+                    </mat-error>
+                </mat-form-field>
+            </td>
+            <td>
+                <mat-form-field class="name">
+                    <input matInput placeholder="Last Name" formControlName="surname" [errorStateMatcher]="matcher">
+                    <mat-error *ngIf="hasError('surname','required')">
+                        Surname is <strong>required</strong>
+                    </mat-error>
+                </mat-form-field>
+            </td>
+        </tr>
+    </table>
+
+    <mat-form-field class="input-element">
+        <input matInput placeholder="Email" formControlName="email" [errorStateMatcher]="matcher">
+        <mat-hint>required, keep email format</mat-hint>
+        <mat-error *ngIf="hasError('email','email') && !hasError('email','required')">
+            Please enter a valid email address
+        </mat-error>
+        <mat-error *ngIf="hasError('email','required')">
+            Email is <strong>required</strong>
+        </mat-error>
+    </mat-form-field>
+
+    <mat-form-field class="input-element">
+        <input matInput placeholder="Enter your password" [type]="hide ? 'password' : 'text'" formControlName="password"
+            [errorStateMatcher]="matcher">
+        <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'"
+            [attr.aria-pressed]="hide">
+            <mat-icon aria-hidden="false">{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+        </button>
+        <mat-hint>required, min length - 8</mat-hint>
+        <mat-error *ngIf="hasError('password','minlength') && !hasError('password','required')">
+            Password's min length has to be at least 8 signs
+        </mat-error>
+        <mat-error *ngIf="hasError('password','required')">
+            Password is <strong>required</strong>
+        </mat-error>
+    </mat-form-field>
+
+    <mat-form-field class="input-element">
+        <input 
+            matInput 
+            placeholder="Confirm your password" 
+            [type]="hide ? 'password' : 'text'"
+            formControlName="confirmPassword" 
+            [errorStateMatcher]="matcher"
+        >
+        <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'"
+            [attr.aria-pressed]="hide">
+            <mat-icon aria-hidden="false">{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+        </button>
+        <mat-hint>required, must match to password</mat-hint>
+        <mat-error *ngIf="hasError('confirmPassword','NoPassswordMatch') && !hasError('confirmPassword','required')">
+            Password do not match
+        </mat-error>
+        <mat-error *ngIf="hasError('confirmPassword','required')">
+            Password is <strong>required</strong>
+        </mat-error>
+    </mat-form-field>
+
+    <mat-form-field class="input-element">
+        <input 
+            matInput 
+            type="text"
+            placeholder="Birthday date"
+            formControlName = "birthdayDate">
+        <mat-hint>required, use date format</mat-hint>
+        <mat-error *ngIf="hasError('birthdayDate','required')">
+            Birthday date is <strong>required</strong>
+        </mat-error>
+        <mat-error *ngIf="hasError('birthdayDate','date')&& !hasError('birthdayDate','required')">
+            This date is not in a proper <strong>format</strong>
+        </mat-error>
+    </mat-form-field>
+
+    <mat-form-field class="input-element">
+        <mat-label>Gender</mat-label>
+        <mat-select formControlName="gender">
+          <mat-option value="female">female</mat-option>
+          <mat-option value="male">male</mat-option>
+         </mat-select>
+    </mat-form-field>
+
+<h3>Hobbies (max 3):  <button mat-raised-button color="warn" type="button" (click)="addHobby()" [disabled]="countHobby>=3">Add hobby</button></h3>
+
+
+<div class="hobby-container" formArrayName="hobbies" *ngFor="let hobby of hobbies.controls; let i=index">
+    <mat-form-field class="example-full-width" >
+            <input matInput placeholder="hobby # {{i+1}}" type="text" [formControlName]='i' [errorStateMatcher]="matcher">
+            <mat-error *ngIf="profile.controls['hobbies'].invalid">
+                Hobby is <strong>required</strong>
+            </mat-error>      
+    </mat-form-field>
+    <button mat-raised-button color="accent" type="button" (click)="delete(i)">Delete</button>
+</div>
+
+<mat-card-actions>
+    <button mat-raised-button color="primary" [disabled]="profile.invalid">Submit</button>
+    <button mat-raised-button color="primary" [disabled]="!isSubmited" type="button" (click)="onClick()">Print rezult</button>
+</mat-card-actions>
+
+    
+</form>
+<mat-card-content *ngIf='isRezult'>
+    <p>{{profile.value | json}}</p>
+  </mat-card-content>
+</mat-card>
+

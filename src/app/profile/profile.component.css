@@ -1,0 +1,27 @@
+.profile-card {
+    width: 300px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    flex-direction: column;
+}
+.name {
+    width: 140px;
+}
+td {
+
+    padding-right: 1%;
+}
+.input-element {
+    width: 200px;
+    margin: 0;
+    padding: 0;
+}
+
+h3 {
+    margin: 0;
+    padding: 0;
+}
+
+
